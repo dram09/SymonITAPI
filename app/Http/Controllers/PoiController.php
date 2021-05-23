@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Requests\PoiFormRequest;
 use App\Models\Poi;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PoiController extends Controller
 {
@@ -44,16 +45,12 @@ class PoiController extends Controller
      */
     public function store(PoiFormRequest $request)
     {
-
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type'=> 'application/json',
-             'x-saas-apikey' => 'sWA64H9tSDeaj5OTTTgGWwCddBPmGpC7XX6qeBsr'
-        ])->post('https://saas.quadminds.com/api/v2/pois',[[
+        $data = [[
             "longAddress"               => $request->get('longAddress'),
-            "geocodeByCep"              => (object)['cep'=>$request->get('cep')],
-            "code"                      => $request->get('code'),
+            //"address"                   => (object)[],
+            // "geocodeByCep"              => (object)['cep'=>$request->get('cep')],
+            "geocodeByCep"              => (object)[],
+            "code"                      => (string)$request->get('code'),
             "name"                      => $request->get('name'),
             "longitude"                 => (float)$request->get('longitude'),
             "latitude"                  => (float)$request->get('latitude'),
@@ -61,11 +58,20 @@ class PoiController extends Controller
             "poiType"                   => $request->get('poiType'),
             "phoneNumber"               => $request->get('phoneNumber'),
             "visitingFrequency"         => $request->get('visitingFrequency'),
-            "visitingDaysDevice1"       => [(int)$request->get('visitingDaysDevice1')]
-        ]]);
+            // "visitingDaysDevice1"       => [(int)$request->get('visitingDaysDevice1')],
+            "visitingDaysDevice1"       => json_decode($request->get('visitingDaysDevice1')),
+            "timeWindow"                => json_decode($request->get('timeWindow')),
+        ]];
 
-       return response()->json($response->json());
+        Log::info($data);
 
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type'=> 'application/json',
+             'x-saas-apikey' => 'sWA64H9tSDeaj5OTTTgGWwCddBPmGpC7XX6qeBsr'
+        ])->post('https://saas.quadminds.com/api/v2/pois',$data);
+
+        return response()->json($response->json());
     }
 
 

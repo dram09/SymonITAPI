@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\OrderFormRequest;
+use Illuminate\Support\Facades\Log;
 
 class Order extends Command
 {
@@ -14,7 +15,7 @@ class Order extends Command
      *
      * @var string
      */
-    protected $signature = 'order';
+    protected $signature = 'order:post';
 
     /**
      * The console command description.
@@ -40,8 +41,8 @@ class Order extends Command
      */
     public function handle()
     {
-        $orders = DB::table('order')->where('quadmin_id', null)->get();
-
+        $orders = DB::table('qm_orders')->where('qm_id', null)->get();
+        //dd($orders);
         foreach($orders as $order) {
 
             $request = new OrderFormRequest();
@@ -51,17 +52,20 @@ class Order extends Command
                 'code'         => $order->code,
                 'date'         => $order->date,
                 'operation'    => $order->operation,
+                'totalAmount'  => $order->totalAmount,
+                'orderMeasures' => $order->orderMeasures,
             ));
-
 
             $objeto = new OrderController();
             $result = $objeto->store($request);
 
             if(isset($result->original['data'][0]['_id']))
             {
-                DB::table('order')
-                ->where('id', $order->id)
-                ->update(['quadmin_id' => $result->original['data'][0]['_id']]);
+                DB::table('pedido')
+                ->where('id', $order->code)
+                ->update(['qm_id' => $result->original['data'][0]['_id']]);
+            }else{
+                Log::error($result);
             }
         }
     }

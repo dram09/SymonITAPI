@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Http\Controllers\PoiController;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\PoiFormRequest;
+use Illuminate\Support\Facades\Log;
 
 class Poi extends Command
 {
@@ -40,14 +41,13 @@ class Poi extends Command
      */
     public function handle()
     {
-        $pois = DB::table('pois')->where('quadmin_id', null)->get();
+        $pois = DB::table('qm_pois')->get();
 
         foreach($pois as $poi) {
 
             $request = new PoiFormRequest();
-
             $request->request->add(array(
-                'code'              => $poi->code,
+                'code'              => str_pad($poi->code,2,"0",STR_PAD_LEFT),
                 'name'              => $poi->name,
                 'longitude'         => $poi->longitude,
                 'latitude'          => $poi->latitude,
@@ -56,19 +56,21 @@ class Poi extends Command
                 'phoneNumber'       => $poi->phoneNumber,
                 'visitingFrequency' => $poi->visitingFrequency,
                 'visitingDaysDevice1' => $poi->visitingDaysDevice1,
+                'timeWindow'        => $poi->timeWindow,
                 'longAddress'       => $poi->longAddress,
-                'cep'               => $poi->cep
+                // 'cep'               => $poi->cep,
             ));
-
 
             $objeto = new PoiController();
             $result = $objeto->store($request);
 
             if(isset($result->original['data'][0]['_id']))
             {
-                DB::table('pois')
-                ->where('id', $poi->id)
-                ->update(['quadmin_id' => $result->original['data'][0]['_id']]);
+                DB::table('cliente')
+                ->where('id', $poi->code)
+                ->update(['qm_id' => $result->original['data'][0]['_id']]);
+            }else{
+                Log::error($result);
             }
 
         }

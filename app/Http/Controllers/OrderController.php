@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Http\Requests\OrderFormRequest;
 use App\Models\Order;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -30,16 +31,23 @@ class OrderController extends Controller
 
     public function store(OrderFormRequest $request)
     {
+
+        $data = [[
+            'poiId'     => (int)$request->get('poiId'),
+            'code'      => (string) $request->get('code'),
+            'date'      => $request->get('date'),
+            'operation' => $request->get('operation'),
+            'totalAmount' => $request->get('totalAmount'),
+            'orderMeasures' => json_decode($request->get('orderMeasures')),
+        ]];
+        
+        Log::info($data);
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type'=> 'application/json',
              'x-saas-apikey' => 'sWA64H9tSDeaj5OTTTgGWwCddBPmGpC7XX6qeBsr'
-        ])->post('https://saas.quadminds.com/api/v2/orders',[[
-            'poiId'     => (int)$request->input('poiId'),
-            'code'      => $request->input('code'),
-            'date'      => $request->input('date'),
-            'operation' => $request->input('operation')
-        ]]);
+        ])->post('https://saas.quadminds.com/api/v2/orders',$data);
 
         return response()->json($response->json());
     }
