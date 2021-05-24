@@ -28,6 +28,7 @@ Route::group(['middleware'=>'cors'],function(){
         'product'                   =>  'App\Http\Controllers\ProductController',
         'route'                     =>  'App\Http\Controllers\RoutesController',
         'way-point'                 =>  'App\Http\Controllers\WayPointsController',
+        'vehicles'                  =>  'App\Http\Controllers\VehiclesController',
     ]);
 
 });

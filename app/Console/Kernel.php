@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\Products::class,
         \App\Console\Commands\Routes::class,
         \App\Console\Commands\WayPoints::class,
+        \App\Console\Commands\Vehicles::class,
     ];
 
     /**
@@ -31,8 +32,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-        $schedule->command('poi:type')->everyMinute();
+        // $schedule->command('poi:type')->everyMinute();
+        $schedule->command('vehicles:get')->everyMinute();
     }
 
     /**
