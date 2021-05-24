@@ -44,9 +44,9 @@ class Vehicles extends Command
 
         $result = $vehicles->index();
 
-        foreach($result->original['data'] as $key => $item)
+        foreach($result->original['data'] as  $vehicle)
         {
-            $code = $item['erpCode'];
+            $code = $vehicle['erpCode'];
 
             if(!empty($code))
             {
@@ -55,7 +55,7 @@ class Vehicles extends Command
                     DB::table('vehiculo')
                     ->where('codigo_erp', $code)
                     ->where('qm_id',null)
-                    ->update(['qm_id' => $item['_id']]);
+                    ->update(['qm_id' => $vehicle['_id']]);
 
                 }
 
