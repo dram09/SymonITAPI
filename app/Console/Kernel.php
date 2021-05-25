@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\Routes::class,
         \App\Console\Commands\WayPoints::class,
         \App\Console\Commands\Vehicles::class,
+        \App\Console\Commands\ConstraintTypes::class,
     ];
 
     /**
@@ -33,7 +34,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('poi:type')->everyMinute();
-        $schedule->command('vehicles:get')->everyMinute();
+        // $schedule->command('vehicles:get')->everyMinute();
+        $schedule->command('constraint:type')->everyMinute();
+
     }
 
     /**
