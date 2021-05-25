@@ -47,7 +47,7 @@ class ConstraintTypes extends Command
 
         foreach($result->original['data'] as  $type)
         {
-            if (!DB::table('qm_constraint_types')->where('qm_id', $type['_id'])->exists()) {
+            if (DB::table('qm_constraint_types')->where('qm_id', $type['_id'])->doesntExist()) {
 
                 DB::table('qm_constraint_types')->insert([
                     'qm_id'         =>  $type['_id'],
