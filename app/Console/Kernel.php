@@ -33,9 +33,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('poi:type')->everyMinute();
-        // $schedule->command('vehicles:get')->everyMinute();
-        $schedule->command('constraint:type')->everyMinute();
+         $schedule->command('poi:type')->everyMinute();
+         $schedule->command('vehicles:get')->everyMinute();
+         $schedule->command('constraint:type')->everyMinute();
 
     }
 

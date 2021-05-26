@@ -76,5 +76,30 @@ class Poi extends Command
         }
 
 
+        $pois = new PoiController();
+
+        $result = $pois->index();
+
+        foreach($result->original['data'] as  $poi)
+        {
+
+            DB::table('pois')->upsert([
+                [
+                 'code'                 => $poi['code'],
+                 'name'                 => $poi['name'],
+                 'longitude'            => $poi['longitude'],
+                 'latitude'             => $poi['latitude'],
+                 'enabled'              => $poi['enabled'],
+                 'poiType'              => $poi['poiType'],
+                 'phoneNumber'          => $poi['phoneNumber'],
+                 'visitingFrequency'    => $poi['visitingFrequency'],
+                 'visitingDaysDevice1'  => isset($poi['visitingDaysDevice1']) ? $poi['visitingDaysDevice1'][0] : 0,
+                 'longAddress'          => $poi['address'],
+                 'quadmin_id'           =>  $poi['_id'],
+                ],
+            ], ['code'], ['name','longitude','latitude','enabled','poiType','phoneNumber','visitingFrequency','visitingDaysDevice1','longAddress']);
+
+        }
+
     }
 }
