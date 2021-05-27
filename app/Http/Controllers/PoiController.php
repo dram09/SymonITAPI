@@ -111,16 +111,16 @@ class PoiController extends Controller
             'Content-Type'=> 'application/json',
              'x-saas-apikey' => 'sWA64H9tSDeaj5OTTTgGWwCddBPmGpC7XX6qeBsr'
         ])->put('https://saas.quadminds.com/api/v2/pois/'.$id,[
-            'longAddress'             => $request->input('longAddress'),
-            'geocodeByCep'  => (object)['cep'=>$request->input('cep')],
-            'name'                      => $request->input('name'),
-            'longitude'                 => (float)$request->input('longitude'),
-            'latitude'                  => (float)$request->input('latitude'),
-            'enabled'                   => (bool)$request->input('enabled'),
-            'poiType'                   => $request->input('poiType'),
-            'phoneNumber'               => $request->input('phoneNumber'),
-            'visitingFrequency'         => $request->input('visitingFrequency'),
-            'visitingDaysDevice1'       => [(int)$request->input('visitingDaysDevice1')]
+            'longAddress'               => $request->get('longAddress'),
+            'geocodeByCep'              => (object)['cep'=>$request->get('cep')],
+            'name'                      => $request->get('name'),
+            'longitude'                 => (float)$request->get('longitude'),
+            'latitude'                  => (float)$request->get('latitude'),
+            'enabled'                   => (bool)$request->get('enabled'),
+            'poiType'                   => $request->get('poiType'),
+            'phoneNumber'               => $request->get('phoneNumber'),
+            'visitingFrequency'         => $request->get('visitingFrequency'),
+            'visitingDaysDevice1'       => [(int)$request->get('visitingDaysDevice1')]
         ]);
 
        return response()->json($response->json(), 200);

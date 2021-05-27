@@ -75,31 +75,63 @@ class Poi extends Command
 
         }
 
+        $pois = DB::table('pois')->where('updated',1)->get();
 
-        $pois = new PoiController();
+        foreach($pois as $poi) {
 
-        $result = $pois->index();
+            $request = new PoiFormRequest();
+            $request->request->add(array(
+                'code'                  => $poi->code,
+                'name'                  => $poi->name,
+                'longitude'             => $poi->longitude,
+                'latitude'              => $poi->latitude,
+                'enabled'               => $poi->enabled,
+                'poiType'               => $poi->poiType,
+                'phoneNumber'           => $poi->phoneNumber,
+                'visitingFrequency'     => $poi->visitingFrequency,
+                'visitingDaysDevice1'   => $poi->visitingDaysDevice1,
+                'longAddress'           => $poi->longAddress,
+                'cep'                   => $poi->cep
+            ));
+            $objeto = new PoiController();
+            $result = $objeto->update($request,$poi->code);
 
-        foreach($result->original['data'] as  $poi)
-        {
-
-            DB::table('pois')->upsert([
-                [
-                 'code'                 => $poi['code'],
-                 'name'                 => $poi['name'],
-                 'longitude'            => $poi['longitude'],
-                 'latitude'             => $poi['latitude'],
-                 'enabled'              => $poi['enabled'],
-                 'poiType'              => $poi['poiType'],
-                 'phoneNumber'          => $poi['phoneNumber'],
-                 'visitingFrequency'    => $poi['visitingFrequency'],
-                 'visitingDaysDevice1'  => isset($poi['visitingDaysDevice1']) ? $poi['visitingDaysDevice1'][0] : 0,
-                 'longAddress'          => $poi['address'],
-                 'quadmin_id'           =>  $poi['_id'],
-                ],
-            ], ['code'], ['name','longitude','latitude','enabled','poiType','phoneNumber','visitingFrequency','visitingDaysDevice1','longAddress']);
+            if(isset($result->original['data']['_id']))
+            {
+                DB::table('pois')
+                ->where('id', $poi->id)
+                ->update(['updated' => 0]);
+            }else{
+                Log::error($result);
+            }
 
         }
+
+
+        // $pois = new PoiController();
+
+        // $result = $pois->index();
+
+        // foreach($result->original['data'] as  $poi)
+        // {
+
+        //     DB::table('pois')->upsert([
+        //         [
+        //          'code'                 => $poi['code'],
+        //          'name'                 => $poi['name'],
+        //          'longitude'            => $poi['longitude'],
+        //          'latitude'             => $poi['latitude'],
+        //          'enabled'              => $poi['enabled'],
+        //          'poiType'              => $poi['poiType'],
+        //          'phoneNumber'          => $poi['phoneNumber'],
+        //          'visitingFrequency'    => $poi['visitingFrequency'],
+        //          'visitingDaysDevice1'  => isset($poi['visitingDaysDevice1']) ? $poi['visitingDaysDevice1'][0] : 0,
+        //          'longAddress'          => $poi['address'],
+        //          'quadmin_id'           =>  $poi['_id'],
+        //         ],
+        //     ], ['code'], ['name','longitude','latitude','enabled','poiType','phoneNumber','visitingFrequency','visitingDaysDevice1','longAddress']);
+
+        // }
 
     }
 }

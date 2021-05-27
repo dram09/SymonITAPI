@@ -33,7 +33,6 @@ class PoiFormRequest extends FormRequest
             'phoneNumber'               => ['required','string'],
             'visitingFrequency'         => ['required','string'],
             'visitingDaysDevice1'       => ['required','string'],
-
             'longAddress'               => ['required','string'],
             'cep'                       => ['required','string'],
 
