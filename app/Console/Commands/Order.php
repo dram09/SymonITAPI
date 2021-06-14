@@ -41,7 +41,7 @@ class Order extends Command
      */
     public function handle()
     {
-        $orders = DB::table('qm_orders')->where('qm_id', null)->get();
+        $orders = DB::table('qm_orders')->whereNull('qm_id')->get();
         //dd($orders);
         foreach($orders as $order) {
 

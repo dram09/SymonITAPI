@@ -41,13 +41,13 @@ class Poi extends Command
      */
     public function handle()
     {
-        $pois = DB::table('qm_pois')->get();
+        $pois = DB::table('qm_pois')->whereNull('qm_id')->get();
 
         foreach($pois as $poi) {
 
             $request = new PoiFormRequest();
             $request->request->add(array(
-                'code'              => str_pad($poi->code,2,"0",STR_PAD_LEFT),
+                'code'              => $poi->code,
                 'name'              => $poi->name,
                 'longitude'         => $poi->longitude,
                 'latitude'          => $poi->latitude,
@@ -58,7 +58,7 @@ class Poi extends Command
                 'visitingDaysDevice1' => $poi->visitingDaysDevice1,
                 'timeWindow'        => $poi->timeWindow,
                 'longAddress'       => $poi->longAddress,
-                // 'cep'               => $poi->cep,
+                'cep'               => $poi->cep,
             ));
 
             $objeto = new PoiController();

@@ -48,7 +48,7 @@ class PoiController extends Controller
         $data = [[
             "longAddress"               => $request->get('longAddress'),
             //"address"                   => (object)[],
-            // "geocodeByCep"              => (object)['cep'=>$request->get('cep')],
+            "geocodeByCep"              => (object)['cep'=>$request->get('cep')],
             "geocodeByCep"              => (object)[],
             "code"                      => (string)$request->get('code'),
             "name"                      => $request->get('name'),
