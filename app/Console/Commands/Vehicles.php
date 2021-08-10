@@ -44,27 +44,53 @@ class Vehicles extends Command
 
         $result = $vehicles->index();
 
-        foreach($result->original['data'] as  $vehicle)
+        if($result->status() == 200)
         {
-            $code = $vehicle['erpCode'];
-
-            if(!empty($code))
+            Log::info($result);
+            foreach($result->original['data'] as  $vehicle)
             {
-                if (DB::table('vehiculo')->where('codigo_erp', $code)->where('qm_id',null)->exists()) {
-
-                    DB::table('vehiculo')
-                    ->where('codigo_erp', $code)
-                    ->where('qm_id',null)
-                    ->update(['qm_id' => $vehicle['_id']]);
-
+                // if(strlen($vehicle['_id']) >= 15){
+                //     continue;
+                // }
+                //$oVehiculo = ->first();
+                if (DB::table('vehiculo')->where('qm_id', $vehicle['_id'])->exists()) 
+                {
+                    DB::table('vehiculo')->where('qm_id', $vehicle['_id'])->update([
+                        'nombre' => $vehicle['name'],
+                        'codigo_erp' => $vehicle['erpCode'],
+                        'placa' => $vehicle['licensePlate']
+                    ]);
+                }
+                else
+                {
+                    DB::table('vehiculo')->insert([
+                        'qm_id' => $vehicle['_id'],
+                        'nombre' => $vehicle['name'],
+                        'codigo_erp' => $vehicle['erpCode'],
+                        'placa' => $vehicle['licensePlate']
+                    ]);
+                    
                 }
 
-            }else{
-                Log::error($code);
+                /*if(!empty($code))
+                {
+                    if (DB::table('vehiculo')->where('codigo_erp', $code)->where('qm_id',$vehicle)->exists()) {
+
+                        DB::table('vehiculo')
+                        ->where('codigo_erp', $code)
+                        ->where('qm_id',null)
+                        ->update(['qm_id' => $vehicle['_id']]);
+
+                    }
+                }else{
+                    Log::error($code);
+                }*/
+
             }
-
         }
-
-
+        else
+        {
+            Log::error($result);
+        }
     }
 }

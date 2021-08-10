@@ -48,7 +48,8 @@ class Routes extends Command
         $consolidatedRoutesForm->merge(array(
             'limit'                 => 100,
             'offset'                => 0,
-            'from'                  => now()->subDays(2),
+            //'from'                  => now()->subDays(2),
+            'from'                  => now(),
             'to'                    => now()
         ));
 

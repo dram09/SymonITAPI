@@ -18,11 +18,9 @@ class VehiclesController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'x-saas-apikey' => 'sWA64H9tSDeaj5OTTTgGWwCddBPmGpC7XX6qeBsr'
-        ])->get('https://saas.quadminds.com/api/v2/vehicles');
+        ])->get('https://saas.quadminds.com/api/v2/vehicles?filter={"type":"AVL-TRAX"}');
 
         return response()->json($response->json());
-
-
     }
 
     /**
