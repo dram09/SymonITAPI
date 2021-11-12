@@ -4,32 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use App\Http\Requests\RouteFormRequest;
-use App\Http\Requests\ConsolidatedRoutesRequest;
-use App\Models\Route;
-use Illuminate\Support\Facades\Log;
 
-class ConsolidatedRoutesController extends Controller
+
+class DriversController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ConsolidatedRoutesRequest $request)
+    public function index($page = 0)
     {
-        $aParams = [];
-        foreach($request->all() as $key => $value){
-            $aParams[] = $key.'='.$value;
-        }
-        $sParams = implode('&',$aParams);
-        Log::info($sParams);
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'x-saas-apikey' => Config('app.quadminds_apikey')
-        ])->get('https://saas.quadminds.com/api/v2/consolidated-routes/search?'.$sParams);
+        ])->get('https://saas.quadminds.com/api/v2/drivers?offset='.($page * 100).'&limit=100');
 
-        return response()->json($response->json(), 200);
+        return response()->json($response->json());
     }
 
     /**
@@ -48,9 +39,9 @@ class ConsolidatedRoutesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(RouteFormRequest $request)
+    public function store(Request $request)
     {
-       
+        //
     }
 
     /**
@@ -61,7 +52,7 @@ class ConsolidatedRoutesController extends Controller
      */
     public function show($id)
     {
-        
+        //
     }
 
     /**
@@ -82,9 +73,9 @@ class ConsolidatedRoutesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RouteFormRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        
+        //
     }
 
     /**
@@ -95,6 +86,6 @@ class ConsolidatedRoutesController extends Controller
      */
     public function destroy($id)
     {
-        
+        //
     }
 }

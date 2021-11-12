@@ -16,15 +16,14 @@ class PoiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($page = 0)
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-            'x-saas-apikey' => 'sWA64H9tSDeaj5OTTTgGWwCddBPmGpC7XX6qeBsr'
-        ])->get('https://saas.quadminds.com/api/v2/pois/search?limit=100&offset=0');
+            'x-saas-apikey' => Config('app.quadminds_apikey')
+        ])->get('https://saas.quadminds.com/api/v2/pois/search?offset='.($page * 100).'&limit=100');
 
         return response()->json($response->json(), 200);
-
     }
 
     /**
@@ -68,7 +67,7 @@ class PoiController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type'=> 'application/json',
-             'x-saas-apikey' => 'sWA64H9tSDeaj5OTTTgGWwCddBPmGpC7XX6qeBsr'
+             'x-saas-apikey' => Config('app.quadminds_apikey')
         ])->post('https://saas.quadminds.com/api/v2/pois',$data);
 
         return response()->json($response->json());
@@ -79,7 +78,7 @@ class PoiController extends Controller
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-            'x-saas-apikey' => 'sWA64H9tSDeaj5OTTTgGWwCddBPmGpC7XX6qeBsr'
+            'x-saas-apikey' => Config('app.quadminds_apikey')
         ])->get('https://saas.quadminds.com/api/v2/pois/'.$id);
 
         return response()->json($response->json(), 200);
@@ -109,7 +108,7 @@ class PoiController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type'=> 'application/json',
-             'x-saas-apikey' => 'sWA64H9tSDeaj5OTTTgGWwCddBPmGpC7XX6qeBsr'
+             'x-saas-apikey' => Config('app.quadminds_apikey')
         ])->put('https://saas.quadminds.com/api/v2/pois/'.$id,[
             'longAddress'               => $request->get('longAddress'),
             'geocodeByCep'              => (object)['cep'=>$request->get('cep')],

@@ -13,12 +13,12 @@ class VehiclesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($page = 0)
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-            'x-saas-apikey' => 'sWA64H9tSDeaj5OTTTgGWwCddBPmGpC7XX6qeBsr'
-        ])->get('https://saas.quadminds.com/api/v2/vehicles?filter={"type":"AVL-TRAX"}');
+            'x-saas-apikey' => Config('app.quadminds_apikey')
+        ])->get('https://saas.quadminds.com/api/v2/vehicles?filter={"type":"AVL-TRAX"}&offset='.($page * 100).'&limit=100');
 
         return response()->json($response->json());
     }

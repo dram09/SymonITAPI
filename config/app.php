@@ -230,4 +230,5 @@ return [
 
     ],
 
+    'quadminds_apikey' => env('QUADMINDS_APIKEY'),
 ];

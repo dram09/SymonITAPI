@@ -16,7 +16,7 @@ class Poi extends Command
      *
      * @var string
      */
-    protected $signature = 'poi:type';
+    protected $signature = 'poi:post';
 
     /**
      * The console command description.

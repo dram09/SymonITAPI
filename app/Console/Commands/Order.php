@@ -49,7 +49,7 @@ class Order extends Command
 
             $request->request->add(array(
                 'poiId'        => $order->poiId,
-                'code'         => $order->code,
+                'code'         => 'E-'.$order->code,
                 'date'         => $order->date,
                 'operation'    => $order->operation,
                 'totalAmount'  => $order->totalAmount,
