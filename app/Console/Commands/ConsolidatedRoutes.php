@@ -17,7 +17,7 @@ class Routes extends Command
      *
      * @var string
      */
-    protected $signature = 'consolidatedRoutes:get';
+    protected $signature = 'consolidatedRoutes:get {date?}';
 
     /**
      * The console command description.
@@ -47,11 +47,15 @@ class Routes extends Command
         $page = 0;
         do{            
             $consolidatedRoutesForm = new ConsolidatedRoutesRequest();
+            $date = $this->argument('date');
+            if($date == ''){
+                $date = now();
+            }
             $consolidatedRoutesForm->merge(array(
                 'limit'                 => 100,
                 'offset'                => $page++*100,
-                'from'                  => now(),
-                'to'                    => now()
+                'from'                  => $date,
+                'to'                    => $date
             ));
             
             $result = $consolidatedRoutesController->index($consolidatedRoutesForm);
@@ -102,10 +106,9 @@ class Routes extends Command
                         //     DB::select("CALL qm_insert_waypoint(?,?,?,?,?,?)",$oWayPoint);
                         // }
                         // DB::commit();
-
+                        // Log::info($data['code']);
                         if(!DB::table('guia_autoventa')->where('codigo',$data['code'])->exists()){
                             
-
                             DB::beginTransaction();
                             
                             $oVehiculo = DB::table('vehiculo')->where('qm_id',$data['deviceId'])->first();
@@ -174,6 +177,18 @@ class Routes extends Command
                                 }
                             }
 
+                            $aGuiaClienteVisita = DB::table('guia_cliente_visita')
+                            ->where('id_guia_autoventa', $idGuiaAutoventa)
+                            ->orderBy('orden')
+                            ->get();
+                            $ordenVisita = 1;
+                            foreach($aGuiaClienteVisita as $oGuiaClienteVisita){
+                                DB::table('guia_cliente_visita')
+                                ->where('id', $oGuiaClienteVisita->id)
+                                ->update([
+                                    'orden_visita' => $ordenVisita++
+                                ]);
+                            }
                             // INSERT INTO guia_autoventa_detalle 
                             // (id_guia_autoventa, id_producto, id_sucursal, id_compania, cajas, botellas, total_unidades)
                             // SELECT v_id_guia_autoventa, producto.id, detalle.id_sucursal, detalle.id_compania, 
