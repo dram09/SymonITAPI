@@ -46,6 +46,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('pois:get')->everyMinute()->withoutOverlapping();
         $schedule->command('products:get')->everyMinute()->withoutOverlapping();
         $schedule->command('consolidatedRoutes:get')->everyMinute()->withoutOverlapping();
+        $schedule->command('orderStatus:get')->dailyAt('03:00')->withoutOverlapping();
     }
 
     /**
