@@ -30,6 +30,9 @@ Route::group(['middleware'=>'cors'],function(){
         'way-point'                 =>  'App\Http\Controllers\WayPointsController',
         'vehicles'                  =>  'App\Http\Controllers\VehiclesController',
         'constrainttype'            =>  'App\Http\Controllers\ConstraintTypesController',
+        'order-placed'              =>  'App\Http\Controllers\OrderPlacedController',
+        'visit'                     =>  'App\Http\Controllers\VisitController',
+
     ]);
 
 });
